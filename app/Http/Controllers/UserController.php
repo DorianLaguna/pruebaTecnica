@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use App\Models\Consent;
+use App\Models\History;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -95,15 +96,23 @@ class UserController extends Controller
             'consent_Id3'
         ]);
         
+        
         //become to boolean
-        if( isset($fieldsToUpdate['consent_Id2'] )){
-            $fieldsToUpdate['consent_Id2'] = $fieldsToUpdate['consent_Id2'] === 'true' ? 1 : 0;
-        }
-        if( isset($fieldsToUpdate['consent_Id3'] )){
-            $fieldsToUpdate['consent_Id3'] = $fieldsToUpdate['consent_Id3'] === 'true' ? 1 : 0;
+        foreach (['consent_Id2', 'consent_Id3'] as $field) {
+            if (isset($fieldsToUpdate[$field])) {
+                $fieldsToUpdate[$field] = $fieldsToUpdate[$field] === 'true' ? 1 : 0;
+        
+                //check if consent has changed
+                if ($user->$field != $fieldsToUpdate[$field]) {
+                    History::create([
+                        'user_id' => $user->id,
+                        'action' => "$field changed to $fieldsToUpdate[$field]",
+                        'date' => now(),
+                    ]);
+                }
+            }
         }
 
-        
         $user->update($fieldsToUpdate);
 
         return response()->json(['message' => 'User updated']);
