@@ -13,7 +13,7 @@ class CardController extends Controller
 
          //check if user is the same
          if(auth()->user()->id != $request->idUser){
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized: User diferent'], 401);
         }
 
         $validator = Validator::make($request->all(),[
@@ -49,7 +49,7 @@ class CardController extends Controller
          $card = Card::where('id', $request->id)->first();
          
          if(auth()->user()->id != $card->user_id){
-             return response()->json(['error' => 'Unauthorized'], 401);
+             return response()->json(['error' => 'Unauthorized: User diferent'], 401);
          }
          
         if($card){

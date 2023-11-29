@@ -96,12 +96,12 @@ class UserController extends Controller
             'consent_Id3'
         ]);
         
-        
+
         //become to boolean
         foreach (['consent_Id2', 'consent_Id3'] as $field) {
             if (isset($fieldsToUpdate[$field])) {
                 $fieldsToUpdate[$field] = $fieldsToUpdate[$field] === 'true' ? 1 : 0;
-        
+
                 //check if consent has changed
                 if ($user->$field != $fieldsToUpdate[$field]) {
                     History::create([
