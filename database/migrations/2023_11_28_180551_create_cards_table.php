@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->string('user');
-            $table->string('name');
-            $table->string('phone');
-            $table->string('password');
-            $table->boolean('consent_Id1');
-            $table->boolean('consent_Id2');
-            $table->boolean('consent_Id3');
-            $table->rememberToken();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('card_number',16);
+            $table->string('consent_Id1',30);
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('cards');
     }
 };

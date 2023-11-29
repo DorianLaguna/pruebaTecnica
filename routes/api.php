@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CardController;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function(){
+
+    //User's accions
+    Route::post('create', [UserController::class, 'create']);
+    Route::post('delete', [UserController::class, 'delete']);
+    Route::post('update', [UserController::class, 'update']);
+
+    //Card
+    Route::post('create-card', [CardController::class, 'createCard']);
+    Route::post('delete-card', [CardController::class, 'deleteCard']);
 });
 
 
-Route::post('get-token', [UserController::class, 'getToken']);
-Route::post('create', [UserController::class, 'create']);
-Route::post('update', [UserController::class, 'update']);
-Route::post('delete', [UserController::class, 'delete']);
+
+Route::post('get-token', [TokenController::class, 'getToken']);
